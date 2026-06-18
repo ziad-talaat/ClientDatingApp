@@ -1,6 +1,6 @@
 export type user={
     id:string,
-    displayName:string,
+    personName:string,
     email:string,
     token:string,
     imageUrl?:string

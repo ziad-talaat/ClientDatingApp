@@ -11,7 +11,7 @@ import { user } from '../../types/user';
 })
 export class Home {
 protected registerMode=signal(false);
-k
+
 showRegister(value:boolean){
   this.registerMode.set(value);
 }
