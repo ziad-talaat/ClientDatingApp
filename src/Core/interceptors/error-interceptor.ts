@@ -35,8 +35,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             router.navigateByUrl('/not-found');
             break;
           case 500:
-            const navigationExtras:NavigationExtras={state:{message:error}};
-           router.navigateByUrl('/server-error',navigationExtras);
+            const navigationExtras:NavigationExtras={state:error.error};
+            router.navigateByUrl('/server-error',navigationExtras);
             break;
           default:
             toast.error('somthing went wrong');
