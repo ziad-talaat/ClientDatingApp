@@ -5,6 +5,7 @@ import { Member } from '../../types/Member';
 import { photo } from '../../types/photo';
 import { editMember } from '../../types/editMember';
 import { resultResponse } from '../../types/resultResponse';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,11 +16,13 @@ private httpClient=inject(HttpClient);
 
 public editMode=signal(false);
 
+  member=signal<Member|null>(null);
+
   getMembers(){
     return this.httpClient.get<Member[]>(this.baseUrl+'members');
   }
 getMember(id:string){
-    return this.httpClient.get<Member>(this.baseUrl+'members/'+id);
+    return this.httpClient.get<Member>(this.baseUrl+'members/'+id).pipe(tap(data=>this.member.set(data)));
   }
 
 getMemberPhoto(id:string){

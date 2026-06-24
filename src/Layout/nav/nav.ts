@@ -5,6 +5,8 @@ import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { ToastService } from '../../Core/services/toast-service';
 import { themes } from '../theme';
 import { finalize } from 'rxjs';
+import { busyInterceptorInterceptor } from '../../Core/interceptors/busy-interceptor-interceptor';
+import { BusyService } from '../../Core/services/busy-service';
 
 @Component({
   selector: 'app-nav',
@@ -37,8 +39,8 @@ export class Nav implements OnInit {
   protected accountService=inject(AccountService)
   protected router=inject(Router)
   private toastService=inject(ToastService);
-
   protected isInProgress=signal<boolean>(false);
+  protected busyService=inject(BusyService);
 
  
 

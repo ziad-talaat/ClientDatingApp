@@ -24,13 +24,17 @@
       <h3 class="text-2xl font-semibold uppercase">Dating App</h3>
     </a>
     
+    <nav class="flex gap-3 my-2 uppercase text-lg text-white">
     @if(accountService.currentUser()){
 
-      <nav class="flex gap-3 my-2 uppercase text-lg text-white">
         <a routerLink="/members" routerLinkActive="text-accent" [routerLinkActiveOptions]="{exact:true}">Matches</a>
         <a routerLink="/lists" routerLinkActive="text-accent">Lists</a>
         <a routerLink="/messages" routerLinkActive="text-accent">Messages</a>
-      </nav>
+      }
+    </nav>
+      
+    @if(busyService.busyCount()>0){
+      <span class="loading loading-spinner text-accent"></span>
     }
 
     <div class="flex align-middle ml-auto gap-3">
