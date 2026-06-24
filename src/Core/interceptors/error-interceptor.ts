@@ -3,10 +3,12 @@ import { catchError } from 'rxjs';
 import { ToastService } from '../services/toast-service';
 import { inject } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { AccountService } from '../services/account-service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toast = inject(ToastService);
   const router = inject(Router);
+  const accountService = inject(AccountService);
 
   return next(req).pipe(
     catchError((error) => {
@@ -22,14 +24,23 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
                   }
                   throw modelErrors.flat();
 
-            }else{
+             }
+             else{
               toast.error(error.error);
             }
           
             break;
           case 401:
-            toast.error('Unauthorized');
-            break;
+            
+           console.log(error);
+               if(error.error?.title)
+                toast.error(error.error.title);
+              else 
+                toast.error(error.error);
+              
+              accountService.logout();
+              break;
+            
 
           case 404:
             router.navigateByUrl('/not-found');

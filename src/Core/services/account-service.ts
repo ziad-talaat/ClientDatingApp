@@ -4,7 +4,8 @@ import { RegisterCreds, user } from '../../types/user';
 import { tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-
+import { FormGroup } from '@angular/forms';
+import{loginRequest} from '../../types/loginRequest' 
 @Injectable({
   providedIn: 'root',
 })
@@ -12,13 +13,14 @@ export class AccountService {
 private http=inject(HttpClient);
 private router=inject(Router);
 currentUser=signal<user|null>(null);
+private baseUrl=environment.apiUrl;
+
+ 
 
 
 
-  private baseUrl=environment.apiUrl;
 
-
-login(creds:any){
+login(creds:loginRequest){
   return this.http.post<user>(this.baseUrl+'account/login',creds)
   .pipe(
     tap(user=>{
@@ -46,9 +48,12 @@ setCurrentUser(user:user){
 }
 
 
+
+
 logout(){
   localStorage.removeItem('user');
   this.currentUser.set(null);
+  this.router.navigateByUrl('/');
 
 }
 

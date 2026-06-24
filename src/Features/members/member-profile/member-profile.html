@@ -1,14 +1,103 @@
-@if(member();as member){
-<div class="flex flex-col gap-3">
-<div class="flex gap-3">
-    <span class="font-semibold">Member since:</span>
-    <span>{{member.created|date:'longDate'}}</span>
-</div>
-<div class="flex gap-3">
-    <span class="font-semibold">Last Active:</span>
-    <span>{{member.lastActive|date:'dd MMM yyyy h:mm a'}}</span>
-</div>
-<h3 class="text-lg font-semibold text-primary">About  {{member.userName}}</h3>
-<div>{{member.description}}</div>
-</div>
+@if (member(); as member) {
+  <div class="flex flex-col gap-3">
+    <div class="flex gap-3">
+      <span class="font-semibold">Member since:</span>
+      <span>{{ member.created | date: 'longDate' }}</span>
+    </div>
+    <div class="flex gap-3">
+      <span class="font-semibold">Last Active:</span>
+      <span>{{ member.lastActive | date: 'dd MMM yyyy h:mm a' }}</span>
+    </div>
+    <h3 class="text-lg font-semibold text-primary">About {{ member.userName }}</h3>
+    @if (memberService.editMode()) {
+      <form (ngSubmit)="editUser(editForm)" #editForm="ngForm" class="card flex flex-col gap-4">
+        <label class="floating-label">
+          <span>User Name</span>
+          <input
+            #user="ngModel"
+            required
+            minlength="2"
+            type="text"
+            class="input w-full"
+            name="userName"
+            [(ngModel)]="editMember.userName"
+          />
+
+          @if (user.touched && user.invalid) {
+            <div class="mt-1 text-sm text-error space-y-1">
+              @if (user.errors?.['required']) {
+                <div>User Name is required</div>
+              }
+
+              @if (user.errors?.['minlength']) {
+                <div>Minimum length is 2</div>
+              }
+            </div>
+          }
+        </label>
+
+        <label class="floating-label">
+          <span>Description</span>
+          <textarea 
+            class="textarea textarea-bordered w-full min-h-40 resize-y"
+            name="description"
+            placeholder="Description"
+            name="description"
+            [(ngModel)]="editMember.description"
+          ></textarea>
+        </label>
+
+        <label class="floating-label">
+          <span>City</span>
+          <input
+          #cit="ngModel"
+            type="text"
+            required
+            minlength="2"
+            class="input w-full"
+            name="city"
+            [(ngModel)]="editMember.city"
+          />
+           @if (cit.touched && cit.invalid) {
+            <div class="mt-1 text-sm text-error space-y-1">
+              @if (cit.errors?.['required']) {
+                <div>city is required</div>
+              }
+
+              @if (cit.errors?.['minlength']) {
+                <div>Minimum length is 2</div>
+              }
+            </div>
+          }
+        </label>
+
+        <label class="floating-label">
+          <span>Country</span>
+          <input
+          #count="ngModel"
+            type="text"
+            required
+            minlength="2"
+            class="input w-full"
+            name="country"
+            [(ngModel)]="editMember.country"
+          />
+           @if (count.touched && count.invalid) {
+            <div class="mt-1 text-sm text-error space-y-1">
+              @if (count.errors?.['required']) {
+                <div>Country is required</div>
+              }
+
+              @if (count.errors?.['minlength']) {
+                <div>Minimum length is 2</div>
+              }
+            </div>
+          }
+        </label>
+        <button class="btn btn-primary" type="submit" [disabled]="editForm.invalid">Save</button>
+      </form>
+    } @else {
+      <div>{{ member.description }}</div>
+    }
+  </div>
 }
