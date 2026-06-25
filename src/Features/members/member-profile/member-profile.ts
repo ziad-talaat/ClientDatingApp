@@ -57,7 +57,7 @@ export class MemberProfile implements OnInit,OnDestroy  {
       }
 
 
-      this.memberService.updateUser(dataForm.form.value,this.memberService.member()!.id).pipe(finalize(()=>this.isSaving.set(false)))
+      this.memberService.updateUser(dataForm.form.value,updatedMember.id).pipe(finalize(()=>this.isSaving.set(false)))
       .subscribe({
         next:result=>{
         const  user=this.accounttService.currentUser();

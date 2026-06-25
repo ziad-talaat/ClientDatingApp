@@ -36,4 +36,21 @@ getMemberPhoto(id:string){
       return this.httpClient.put<resultResponse<string>>(this.baseUrl+'members/'+id,user);
     }
 
+     deleteImage(photoId:number){
+      return this.httpClient.delete<boolean>(this.baseUrl+'members/remove-photo/'+photoId);
+    }
+
+    uploadImage(file:File){
+      const formData=new FormData();
+      formData.append('file',file);
+     return  this.httpClient.post<photo>(`${this.baseUrl}members/add-photo`,formData);
+    }
+
+
+    setMainImage(photo:photo){
+      console.log(photo);
+  console.log(photo.photoId);
+     return this.httpClient.put(`${this.baseUrl}members/set-main-photo/${photo.photoId}`,null)
+    }
+
 }

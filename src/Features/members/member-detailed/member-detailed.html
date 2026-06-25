@@ -5,7 +5,7 @@
   <div class="card bg-base-100 shadow-xl w-80 ">
     <div class="pt-6">
       <img
-        [src]="member.imageUrl"
+        [src]="member.imageUrl??'/user.png'"
         [alt]="member.userName"
         class="w-40 h-40 rounded-full object-cover mx-auto"
       />
