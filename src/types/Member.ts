@@ -1,7 +1,7 @@
 export type Member={
  id:string,
  dateOfBirth:string,
- imageUrl?:string,
+ photoUrl?:string,
  userName:string,
  created:string,
  lastActive:string,

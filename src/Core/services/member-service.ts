@@ -48,9 +48,13 @@ getMemberPhoto(id:string){
 
 
     setMainImage(photo:photo){
-      console.log(photo);
-  console.log(photo.photoId);
+    
      return this.httpClient.put(`${this.baseUrl}members/set-main-photo/${photo.photoId}`,null)
+    }
+
+
+    unSetMainImage(){
+     return this.httpClient.post(`${this.baseUrl}members/disaple-main-image`,null);
     }
 
 }

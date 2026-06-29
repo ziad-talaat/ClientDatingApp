@@ -1,17 +1,89 @@
 <div class="card bg-base-100 w-1/2 mx-auto flex flex-col p-6 rounded-lg shadow-lg">
-    <div class="card-title justify-center text-3xl text-primary">
-     Sign Up
+  <div class="card-title justify-center text-3xl text-primary">Sign up</div>
+  <div class="card-body w-full">
+    <ul class="steps">
+      <li class="step step-primary">Credentials</li>
+      <li class="step" [class.step-primary]="currentStep() == 2">Profile</li>
+    </ul>
+
+    @if (currentStep() == 1) {
+      <form [formGroup]="registerForm" class="flex flex-col gap-4 w-full steps">
+        <app-text-input class="mt-2" type="text" label="email" formControlName="email" />
+        <app-text-input type="text" label="user name" formControlName="userName" />
+
+        <app-text-input type="password" label="password" formControlName="password" />
+        <app-text-input
+          type="password"
+          label="confirm password"
+          formControlName="confirmPassword"
+        />
+        <app-text-input type="number" label="phone number" formControlName="phoneNumber" />
+      </form>
+    }
+    @if (currentStep() == 2) {
+      <form [formGroup]="profileForm" class="flex flex-col gap-4 w-full steps">
+         
+        <div class="flex items-center gap-4 mt-2">
+            <div class="font-semibold">Gender:</div>
+            <label class="flex gap-3 items-center">
+              <span>Male</span>
+              <input type="radio" formControlName="gender" value="male" class="radio radio-primary">
+            </label>
+            <label class="flex gap-3 items-center">
+              <span>Female</span>
+              <input type="radio" formControlName="gender" value="female" class="radio radio-primary">
+            </label>
+        </div>
+
+
+        <app-text-input [maxDate]="getMaxDate()" type="date" label="date of birth" formControlName="dateOfBirth" />
+
+        <app-text-input type="text" label="city" formControlName="city" />
+        <app-text-input type="text" label="country" formControlName="country" />
+      </form>
+    }
+    @if(currentStep()===1){
+
+    <div class="flex items-center justify-end gap-3">
+      <button (click)="cancel()" type="button" class="btn">
+          Cancel
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="nextStep()"
+        [disabled]="registerForm.invalid"
+        type="button"
+      >
+        Next
+      </button>
     </div>
-    <div class="card-body w-full">
-        <form #registerForm="ngForm" class="flex flex-col gap-4 w-full" (ngSubmit)="register()">
-            <input type="text" class="input w-full" name="email" [(ngModel)]="creds.email" placeholder="email">
-            <input type="text" class="input w-full" name="displayName" [(ngModel)]="creds.displayName" placeholder="display Name">
-            <input type="password" class="input w-full" name="password" [(ngModel)]="creds.password" placeholder="password">
-            <input type="password" class="input w-full" name="confirmPassword" [(ngModel)]="creds.confirmPassword" placeholder="confirm password">
-            <div class="flex items-center justify-end gap-3">
-                <button (click)="cancel()" type="button" class="btn">Cancel</button>
-                <button class="btn btn-primary" type="submit">Register</button>
-            </div>
-        </form>
+    }
+   @if(currentStep()==2){
+    <div class="flex items-center justify-end gap-3">
+      <button (click)="prevStep()" type="button" class="btn">
+         Prev
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="register()"
+        [disabled]="profileForm.invalid"
+        type="submit"
+      >
+        Submit
+      </button>
     </div>
+   }
+  </div>
+  
+  @if(validationErrors().length > 0){
+    <div class="mt-5 flex bg-gray-200 rounded-2xl w-1/2 p-3 mx-auto">
+       <ul class="flex flex-col text-error space-y-1">
+        @for(error of validationErrors();track $index){
+          <li class="text-error">{{error}}</li>
+        }
+       </ul>
+    </div>
+  }
+
+    
 </div>

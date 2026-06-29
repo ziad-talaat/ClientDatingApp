@@ -3,7 +3,7 @@ export type user={
     userName:string,
     email:string,
     token:string,
-    imageUrl?:string
+    photoUrl?:string
 };
 
 export type LoginCreds={
@@ -12,7 +12,12 @@ export type LoginCreds={
 }
 export type RegisterCreds={
     email:string,
+    userName:string,
     password:string,
-    displayName:string,
-    confirmPassword:string
+    confirmPassword:string,
+    phoneNumber:string,
+    city:string,
+    country:string,
+    dateOfBirth:string,
+    gender:string
 }

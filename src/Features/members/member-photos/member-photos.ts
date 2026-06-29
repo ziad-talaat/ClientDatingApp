@@ -2,7 +2,6 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { MemberService } from '../../../Core/services/member-service';
 import { ActivatedRoute } from '@angular/router';
 import { photo } from '../../../types/photo';
-import { AsyncPipe } from '@angular/common';
 import { ImageUpload } from "../../../Shared/image-upload/image-upload";
 import { ToastService } from '../../../Core/services/toast-service';
 import { AccountService } from '../../../Core/services/account-service';
@@ -13,7 +12,7 @@ import { DeleteButton } from "../../../Shared/delete-button/delete-button";
 
 @Component({
   selector: 'app-member-photos',
-  imports: [AsyncPipe, ImageUpload, StarButton, DeleteButton],
+  imports: [ ImageUpload, StarButton, DeleteButton],
   templateUrl: './member-photos.html',
   styleUrl: './member-photos.css',
 })
@@ -40,6 +39,17 @@ onUploadImage(file:File){
 this.loading.set(true);
 this.memberService.uploadImage(file).subscribe({
   next:photo=>{
+    
+   const user= this.accountService.currentUser();
+     user!.photoUrl=photo.photoUrl;
+      this.accountService.setCurrentUser(user!);
+      this.memberService.member.update(member=>{
+        if(!member)return member;
+        return {
+          ...member,
+          photoUrl:photo.photoUrl,
+        }
+      })
     this.memberService.editMode.set(false);
     this.loading.set(false);
     this.photos.update((old)=>{
@@ -55,17 +65,36 @@ this.memberService.uploadImage(file).subscribe({
 
 
 setMainPhoto(photo:photo){
+
+  if(photo.photoUrl==this.accountService.currentUser()?.photoUrl)
+  {
+      this.memberService.unSetMainImage().subscribe({
+        next:()=>{
+          const currentUser= this.accountService.currentUser();
+            if(currentUser){
+             currentUser.photoUrl=undefined;
+            }
+             this.accountService.setCurrentUser(currentUser as user);
+
+              this.memberService.member.update(member=>({
+              ...member,
+              photoUrl:undefined
+             })as Member)
+        }
+      })
+      return;
+  }
   
 this.memberService.setMainImage(photo).subscribe({
   next:result=>{
      const currentUser= this.accountService.currentUser();
      if(currentUser){
-      currentUser.imageUrl=photo.photoUrl;
+      currentUser.photoUrl=photo.photoUrl;
      }
      this.accountService.setCurrentUser(currentUser as user);
      this.memberService.member.update(member=>({
       ...member,
-      imageUrl:photo.photoUrl
+      photoUrl:photo.photoUrl
      })as Member)
   }
 });

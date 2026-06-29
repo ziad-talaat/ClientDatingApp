@@ -1,0 +1,54 @@
+<label class="floating-label text-left">
+  <span> {{label()}} </span>
+  <input
+    type="{{type()}}"
+    [max]="maxDate()"
+    [formControl]="control"
+    [placeholder]="label()"
+    class="input w-full"
+    [class.input-error]="
+      control.invalid &&
+      control.dirty &&
+      control.touched
+    "
+    [class.input-success]="
+      control.valid &&
+      control.touched
+    "
+  />
+  @if (
+  control.invalid &&
+  control.touched &&
+  control.dirty
+  ) {
+    @if (control.hasError('required') ) {
+      <div class="validation-hint text-error text-xs">{{label()}} cant be blank</div>
+    } @if (control.hasError('email') ) {
+      <div class="validation-hint text-error text-xs">invalid {{label()}} address</div>
+    }@if (control.hasError('minlength') ) {
+      <div class="validation-hint text-error text-xs">{{label()}} must be at least {{control.errors?.['minlength'].requiredLength}} charachters</div>
+    }@if (control.hasError('maxlength')) {
+      <div class="validation-hint text-error text-xs">{{label()}} must be at most {{control.errors?.['maxlength'].requiredLength}} charachters</div>
+    }@if (control.hasError('passwordMismatch') ) {
+      <div class="validation-hint text-error text-xs">{{label()}} must match password  </div>
+
+    }
+    @if (control.hasError('pattern') && label()=='password'  ) {
+      <div class="validation-hint text-error text-xs">{{label()}} should contain upper cace and lower case and numeric and nonalphanumeric chars  </div>
+
+    }
+      @if (control.hasError('pattern') && label()=='phone number' ) {
+      <div class="validation-hint text-error text-xs">not valid egyption phone number  </div>
+    }
+    @if (control.hasError('pattern') && label()=='user name' ) {
+      <div class="validation-hint text-error text-xs">only alphapetic chars are allowed </div>
+    }
+      <!-- @if (control.hasError('futureDate') ) {
+      <div class="validation-hint text-error text-xs">future date cant be your birth date  </div>
+    } -->
+
+
+
+
+  }
+</label>

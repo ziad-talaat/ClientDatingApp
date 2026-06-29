@@ -10,6 +10,4 @@ import { RouterLink } from "@angular/router";
 })
 export class MemberCard {
 member=input.required<Member>();
-
-
 }

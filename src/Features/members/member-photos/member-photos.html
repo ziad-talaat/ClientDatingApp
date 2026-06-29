@@ -9,8 +9,8 @@
             <img [src]="photo?.photoUrl" />
             @if(memberService.member()?.id==accountService.currentUser()?.id){
 
-              <app-star-button   class="absolute top-1 right-1" [selected]="photo.photoUrl===memberService.member()?.imageUrl" [disapled]="photo.photoUrl===memberService.member()?.imageUrl"  (emitSetMainImageevent)="setMainPhoto(photo)" ></app-star-button>
-              <app-delete-button class="absolute top-1 left-1" [selected]="photo.photoUrl===memberService.member()?.imageUrl" [disapled]="photo.photoUrl===memberService.member()?.imageUrl" (emitSetMainImageevent)="deletePhoto(photo.photoId) "/>
+              <app-star-button   class="absolute top-1 right-1" [selected]="photo.photoUrl===memberService.member()?.photoUrl"   (emitSetMainImageevent)="setMainPhoto(photo)" ></app-star-button>
+              <app-delete-button class="absolute top-1 left-1" [selected]="photo.photoUrl===memberService.member()?.photoUrl" [disapled]="photo.photoUrl===memberService.member()?.photoUrl" (emitSetMainImageevent)="deletePhoto(photo.photoId) "/>
             }
           </div>
           

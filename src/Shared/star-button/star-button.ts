@@ -11,7 +11,7 @@ import { photo } from '../../types/photo';
 export class StarButton {
  
 
-    disapled=input<boolean>();   
+    // disapled=input<boolean>();   
     selected=input<boolean>();   
 
 
