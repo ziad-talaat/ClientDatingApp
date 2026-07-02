@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Member } from '../../types/Member';
@@ -6,6 +6,8 @@ import { photo } from '../../types/photo';
 import { editMember } from '../../types/editMember';
 import { resultResponse } from '../../types/resultResponse';
 import { tap } from 'rxjs';
+import { pageResult } from '../../types/pageResult';
+import { memberParams } from '../../types/MemberParams';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +20,19 @@ public editMode=signal(false);
 
   member=signal<Member|null>(null);
 
-  getMembers(){
-    return this.httpClient.get<Member[]>(this.baseUrl+'members');
+  getMembers( memberParams:memberParams){ 
+    let params=new HttpParams();
+    params=params.append('currentPage',memberParams.currentPage);
+    params=params.append('pageSize',memberParams.pageSize);
+    params=params.append('minAge',memberParams.minAge);
+    params=params.append('maxAge',memberParams.maxAge);
+    params=params.append('orderBy',memberParams.orderBy);
+    if(memberParams.gender) params=params.append('gender',memberParams.gender);
+    return this.httpClient.get<pageResult<Member>>(`${this.baseUrl}members`,{params}).pipe(
+      tap(()=>{
+        localStorage.setItem('filters',JSON.stringify(memberParams));
+      })
+    );
   }
 getMember(id:string){
     return this.httpClient.get<Member>(this.baseUrl+'members/'+id).pipe(tap(data=>this.member.set(data)));
@@ -57,4 +70,11 @@ getMemberPhoto(id:string){
      return this.httpClient.post(`${this.baseUrl}members/disaple-main-image`,null);
     }
 
+
+
+    getFiltersParams(){
+     let params =  new memberParams();
+     params=JSON.parse(localStorage.getItem('filters')!);
+      return params;
+    }
 }

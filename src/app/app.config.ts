@@ -17,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([errorInterceptor,jwtInterceptor,busyInterceptorInterceptor])),
     provideAppInitializer(async () => {
       const initService = inject(InitService);
+      
 
       return new Promise<void>((resolve) => {
         setTimeout(async () => {

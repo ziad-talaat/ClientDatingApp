@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { FormGroup } from '@angular/forms';
 import{loginRequest} from '../../types/loginRequest' 
+import { LikesService } from './likes-service';
 @Injectable({
   providedIn: 'root',
 })
@@ -14,6 +15,8 @@ private http=inject(HttpClient);
 private router=inject(Router);
 currentUser=signal<user|null>(null);
 private baseUrl=environment.apiUrl;
+
+private likeService=inject(LikesService);
 
  
 
@@ -45,6 +48,7 @@ register(creds:RegisterCreds){
 setCurrentUser(user:user){
    localStorage.setItem('user',JSON.stringify(user));
         this.currentUser.set(user);
+        this.likeService.getLikeIds();
 }
 
 
@@ -52,8 +56,10 @@ setCurrentUser(user:user){
 
 logout(){
   localStorage.removeItem('user');
+  localStorage.removeItem('filters')
   this.currentUser.set(null);
   this.router.navigateByUrl('/');
+  this.likeService.clearLikeIds();
 
 }
 
