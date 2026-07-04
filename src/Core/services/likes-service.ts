@@ -1,8 +1,10 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Member } from '../../types/Member';
 import { tap } from 'rxjs';
+import { pageResult } from '../../types/pageResult';
+import { memberParams } from '../../types/MemberParams';
 
 @Injectable({
   providedIn: 'root',
@@ -17,8 +19,18 @@ export class LikesService {
    return this.httpClient.post(`${this.baseUrl}likes/${id}`,{});
   }
   
-  getLikes(predicate:string){
-   return this.httpClient.get<Member[]>(`${this.baseUrl}likes?likeType=${predicate}`);
+  getLikes(predicate:string,memberParams:memberParams){
+    let params=new HttpParams();
+    params=params.append('currentPage',memberParams.currentPage);
+    params=params.append('pageSize',memberParams.pageSize);
+    params=params.append('minAge',memberParams.minAge);
+    params=params.append('maxAge',memberParams.maxAge);
+    params=params.append('orderBy',memberParams.orderBy);
+    params=params.append('likeType',predicate);
+    if(memberParams.gender) params=params.append('gender',memberParams.gender);
+
+    
+   return this.httpClient.get<pageResult<Member>>(`${this.baseUrl}likes`,{params});
   }
    
   getLikeIds(){

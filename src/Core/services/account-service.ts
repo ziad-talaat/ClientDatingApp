@@ -24,7 +24,7 @@ private likeService=inject(LikesService);
 
 
 login(creds:loginRequest){
-  return this.http.post<user>(this.baseUrl+'account/login',creds)
+  return this.http.post<user>(this.baseUrl+'account/login',creds,{withCredentials:true})
   .pipe(
     tap(user=>{
       if(user){
@@ -35,7 +35,7 @@ login(creds:loginRequest){
 }
 
 register(creds:RegisterCreds){
-  return this.http.post<user>(this.baseUrl+'account/register',creds)
+  return this.http.post<user>(this.baseUrl+'account/register',creds,{withCredentials:true})
   .pipe(
     tap(user=>{
       if(user){
@@ -62,5 +62,13 @@ logout(){
   this.likeService.clearLikeIds();
 
 }
+
+refreshToken(token:string){
+  return this.http.post<user>(`${this.baseUrl}account/generateNewAccessToken?token=${token}`, {},{
+    withCredentials: true
+  });
+}
+
+
 
 }

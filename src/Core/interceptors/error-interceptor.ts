@@ -1,5 +1,5 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { catchError } from 'rxjs';
+import { catchError, switchMap, throwError } from 'rxjs';
 import { ToastService } from '../services/toast-service';
 import { inject } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
@@ -15,39 +15,44 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       if (error) {
         switch (error.status) {
           case 400:
-            if(error.error.errors){
-              const modelErrors=[];
-              for(const key in error.error.errors){
-                   if(error.error.errors[key]){
-                    modelErrors.push(error.error.errors[key]);
-                   }
-                  }
-                  throw modelErrors.flat();
-
-             }
-             else{
+            if (error.error.errors) {
+              const modelErrors = [];
+              for (const key in error.error.errors) {
+                if (error.error.errors[key]) {
+                  modelErrors.push(error.error.errors[key]);
+                }
+              }
+              throw modelErrors.flat();
+            } else {
               toast.error(error.error);
             }
-          
             break;
           case 401:
-            
-           console.log(error);
-               if(error.error?.title)
-                toast.error(error.error.title);
-              else 
-                toast.error(error.error);
-              
-              accountService.logout();
-              break;
-            
+            if(req.url.includes('/generateNewAccessToken')){
+              return throwError(()=>error);
+            }
+           return accountService.refreshToken(accountService.currentUser()?.token ?? '').pipe(
+              switchMap(user => {
+                
+                  accountService.setCurrentUser(user);
+                  const clonedReq = req.clone();
+                return next(clonedReq);
+              }),
+              catchError(err => {
+                toast.error(err.error?.message ?? 'invalid Token need to relogin');
+                accountService.logout();
 
+               return throwError(()=>err);
+              }),
+            );
+
+           
           case 404:
             router.navigateByUrl('/not-found');
             break;
           case 500:
-            const navigationExtras:NavigationExtras={state:error.error};
-            router.navigateByUrl('/server-error',navigationExtras);
+            const navigationExtras: NavigationExtras = { state: error.error };
+            router.navigateByUrl('/server-error', navigationExtras);
             break;
           default:
             toast.error('somthing went wrong');
