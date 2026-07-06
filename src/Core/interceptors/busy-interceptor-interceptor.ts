@@ -4,13 +4,25 @@ import { inject } from '@angular/core';
 import { finalize, tap } from 'rxjs';
 
 export const busyInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
-  
     const busService=inject(BusyService);
+   let spinnerShown = false;
+
+     const timer = setTimeout(() => {
+        spinnerShown=true;
+    busService.busy();
+  }, 200); 
+
     
-    busService.busy(); 
     return next(req).pipe(
-       finalize(()=>busService.idle())
-       );
+       finalize(()=>{
+           clearTimeout(timer);
+
+           if(spinnerShown){
+               busService.idle();
+            }
+
+       }
+       ));
 
 
 };
