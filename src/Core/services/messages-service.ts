@@ -20,10 +20,8 @@ export class MessagesService {
    params= params.append('currentPage',pageNumber);
    params= params.append('container',container);
    
-   const headers = new HttpHeaders({
-  'Cache-Control': 'max-age=30'
-});
-   return  this.httpClient.get<pageResult<message>>(`${this.baseUrl}Messages`,{params,headers});
+   
+   return  this.httpClient.get<pageResult<message>>(`${this.baseUrl}Messages`,{params});
    }
 
   getMessageThread(recipintId:string){
