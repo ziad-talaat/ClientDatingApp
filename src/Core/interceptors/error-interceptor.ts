@@ -28,7 +28,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             }
             break;
           case 401:
-            if(req.url.includes('/generateNewAccessToken')){
+            if(req.url.includes('/generateNewAccessToken') || req.url.includes('/login') || req.url.includes('/register')  ){
               return throwError(()=>error);
             }
            return accountService.refreshToken(accountService.currentUser()?.token ?? '').pipe(

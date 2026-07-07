@@ -3,7 +3,8 @@ export type user={
     userName:string,
     email:string,
     token:string,
-    photoUrl?:string
+    photoUrl?:string,
+    role:string[]
 };
 
 export type LoginCreds={

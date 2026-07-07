@@ -5,12 +5,12 @@ import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { ToastService } from '../../Core/services/toast-service';
 import { themes } from '../theme';
 import { finalize } from 'rxjs';
-import { busyInterceptorInterceptor } from '../../Core/interceptors/busy-interceptor-interceptor';
 import { BusyService } from '../../Core/services/busy-service';
+import { HasRole } from '../../Shared/directives/has-role';
 
 @Component({
   selector: 'app-nav',
-  imports: [FormsModule, RouterLink, RouterLinkActive,ReactiveFormsModule],
+  imports: [FormsModule, RouterLink, RouterLinkActive,ReactiveFormsModule,HasRole],
   templateUrl: './nav.html',
   styleUrl: './nav.css',
 })
@@ -81,10 +81,7 @@ export class Nav implements OnInit {
         this.loginForm.reset();
         this.router.navigate(['/members']);
       },
-      error:error=>{
-       console.log(error.error);
-       
-        },
+      error:error=>this.toastService.error(error.error?.message??"invaid Data")
     })
   }
 

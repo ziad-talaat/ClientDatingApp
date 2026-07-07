@@ -46,9 +46,13 @@ register(creds:RegisterCreds){
 }
 
 setCurrentUser(user:user){
+  user.role= this.getRolesFromUserToken(user); 
    localStorage.setItem('user',JSON.stringify(user));
         this.currentUser.set(user);
         this.likeService.getLikeIds();
+
+
+
 }
 
 
@@ -68,6 +72,19 @@ refreshToken(token:string){
     withCredentials: true
   });
 }
+
+
+private getRolesFromUserToken(user:user):string[]{
+  const payload=user?.token.split('.')[1];
+  const decoded=atob(payload);
+   
+  const jsonPayload=JSON.parse(decoded);
+
+  return Array.isArray(jsonPayload.role) ? jsonPayload.role  : [jsonPayload.role];
+
+}
+
+
 
 
 
