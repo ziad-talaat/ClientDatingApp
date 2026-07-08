@@ -31,20 +31,43 @@ export class UserManagment implements OnInit {
 
 
    openRolesModel(user:userRoles){
-    this.selectedUser=user;
+     this.selectedUser = {
+    ...user,
+    roles: [...user.roles]
+  };
+
     this.rolesModel.nativeElement.showModal();
    }
 
 
 
+toggleRole(role: string, event: Event) {
+  if(this.selectedUser == undefined ||this.selectedUser == null)return;
 
-//  updateUserRoles(userId:string,roles:string[]){
-//   this.adminService.updateUserRoles(userId,roles).subscribe({
-//     next:data=>this.usersRoles.update(x=>{
-//       return [...x,x.us]
-//     })
-//   })
-//  }
+  const checked=(event.target as HTMLInputElement).checked;
+  if(checked){
+    console.log(role);
+    this.selectedUser?.roles.push(role);
+  } 
+  else{
+    this.selectedUser.roles=this.selectedUser?.roles.filter(r=>r!==role);
+  }
+}
+
+ updateUserRoles(){
+  if(this.selectedUser ===null)return;
+  this.adminService.updateUserRoles(this.selectedUser?.id,this.selectedUser?.roles).subscribe({
+    next:data=>{
+      this.usersRoles.update(usersRoles=>{
+        if(usersRoles ===null)return null;
+        return  usersRoles.map(userRole=>{
+          return  userRole.id !== this.selectedUser?.id? userRole: {...this.selectedUser}
+        })
+      })
+   this.rolesModel.nativeElement.close();
+    }
+  })
+ }
 
 
 }

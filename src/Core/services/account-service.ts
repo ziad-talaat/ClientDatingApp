@@ -18,11 +18,6 @@ private baseUrl=environment.apiUrl;
 
 private likeService=inject(LikesService);
 
- 
-
-
-
-
 login(creds:loginRequest){
   return this.http.post<user>(this.baseUrl+'account/login',creds,{withCredentials:true})
   .pipe(
@@ -47,7 +42,7 @@ register(creds:RegisterCreds){
 
 setCurrentUser(user:user){
   user.role= this.getRolesFromUserToken(user); 
-   localStorage.setItem('user',JSON.stringify(user));
+  //  localStorage.setItem('user',JSON.stringify(user));
         this.currentUser.set(user);
         this.likeService.getLikeIds();
 
@@ -59,7 +54,7 @@ setCurrentUser(user:user){
 
 
 logout(){
-  localStorage.removeItem('user');
+  // localStorage.removeItem('user');
   localStorage.removeItem('filters')
   this.currentUser.set(null);
   this.router.navigateByUrl('/');
@@ -67,8 +62,8 @@ logout(){
 
 }
 
-refreshToken(token:string){
-  return this.http.post<user>(`${this.baseUrl}account/generateNewAccessToken?token=${token}`, {},{
+refreshToken(){
+  return this.http.post<user>(`${this.baseUrl}account/generateNewAccessToken`, {},{
     withCredentials: true
   });
 }

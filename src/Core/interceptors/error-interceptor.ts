@@ -31,9 +31,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             if(req.url.includes('/generateNewAccessToken') || req.url.includes('/login') || req.url.includes('/register')  ){
               return throwError(()=>error);
             }
-           return accountService.refreshToken(accountService.currentUser()?.token ?? '').pipe(
+           return accountService.refreshToken().pipe(
               switchMap(user => {
-                
                   accountService.setCurrentUser(user);
                   const clonedReq = req.clone();
                 return next(clonedReq);

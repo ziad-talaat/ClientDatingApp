@@ -2,12 +2,14 @@
     <div class="flex justify-between items-center">
         <div class="tabs tabs-border tabs-lg text-primary">
             @for(tab of tabs; track $index){
-                <button 
+                <a 
+                [routerLink]="tab.value === 'photos' ? 'photosManagment' : 'userManagment'"
+                 routerLinkActive="tab-active"
                 class="tab"
                 [hidden]="tab.value==='roles' && !accountService.currentUser()?.role?.includes('Admin')"
                 [class.tab-active]="activeTab===tab.value"
                 (click)="setTab(tab.value)"
-                >{{tab.label}}</button>
+                >{{tab.label}}</a>
 
             }
         </div>
