@@ -1,17 +1,21 @@
 @if(member(); as member) {
 <div
   routerLink="/members/{{ member.id }}"
-  class="card cursor-pointer transition-all duration-300 ease-in-out transform hover:-translate-y-1.5 relative"
+  class="card cursor-pointer transition-all duration-300 ease-in-out transform hover:-translate-y-1.5 relative mb-4"
 >
   <img
     [src]="member.photoUrl ?? '/user.png'"
     alt="{{ member.userName }} image"
     class="rounded-lg w-full h-80 object-cover"
   />
+        
+        @if(isOnLine()){
+            <span class="status status-success status-xl absolute top-3 left-3"></span>         
+        }
 
- 
-  <button  (click)="toggleLike($event)"
-    class="absolute top-2 right-2 z-30 btn btn-ghost btn-circle"
+
+  <button (click)="toggleLike($event)"
+    class="absolute top-2 right-2 z-30 btn btn-ghost btn-circle bg-black"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"

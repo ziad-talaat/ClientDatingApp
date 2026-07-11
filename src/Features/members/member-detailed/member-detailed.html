@@ -12,10 +12,13 @@
     </div>
 
     <div class="card-body">
-      <div class="text-center">
-        <h2 class="text-2xl font-bold text-primary">
-          {{ member.userName }}, {{member.dateOfBirth|age }}
-        </h2>
+      <div class="flex flex-col items-center">
+        <div class="flex  text-2xl text-primary items-center">
+          {{ member.userName }}, {{member.dateOfBirth|age }} 
+          @if(presenceService.onLineUsers().includes(member.id)){
+             <span class="status status-success status-xl  ml-3"></span> 
+          }
+        </div>
 
         <p class="text-base-content/70">
           {{ member.city }}, {{ member.country }}

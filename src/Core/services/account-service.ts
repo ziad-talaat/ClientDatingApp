@@ -7,12 +7,15 @@ import { environment } from '../../environments/environment';
 import { FormGroup } from '@angular/forms';
 import{loginRequest} from '../../types/loginRequest' 
 import { LikesService } from './likes-service';
+import { PresenceService } from './presence-service';
+import { HubConnectionState } from '@microsoft/signalr';
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService {
 private http=inject(HttpClient);
 private router=inject(Router);
+private presenceService=inject(PresenceService);
 currentUser=signal<user|null>(null);
 private baseUrl=environment.apiUrl;
 
@@ -42,12 +45,12 @@ register(creds:RegisterCreds){
 
 setCurrentUser(user:user){
   user.role= this.getRolesFromUserToken(user); 
-  //  localStorage.setItem('user',JSON.stringify(user));
         this.currentUser.set(user);
         this.likeService.getLikeIds();
-
-
-
+  
+        if(this.presenceService.hubConnection?.state !== HubConnectionState.Connected){
+           this.presenceService.createHubConnection(user);
+        }
 }
 
 
@@ -59,6 +62,7 @@ logout(){
   this.currentUser.set(null);
   this.router.navigateByUrl('/');
   this.likeService.clearLikeIds();
+  this.presenceService.stopHubConnection();
 
 }
 

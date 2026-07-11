@@ -1,7 +1,9 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { Member } from '../../../types/Member';
 import { RouterLink } from "@angular/router";
 import { LikesService } from '../../../Core/services/likes-service';
+import { PresenceService } from '../../../Core/services/presence-service';
+import { HubConnection, HubConnectionState } from '@microsoft/signalr';
 
 @Component({
   selector: 'app-member-card',
@@ -10,11 +12,15 @@ import { LikesService } from '../../../Core/services/likes-service';
   styleUrl: './member-card.css',
 })
 export class MemberCard {
+ 
 member=input.required<Member>();
 private likeService=inject(LikesService);
-
+protected presenceService=inject(PresenceService);
 protected hasLiked=computed(()=>this.likeService.likedIds().includes(this.member().id));
-  
+ 
+protected isOnLine=computed(()=>this.presenceService.onLineUsers().includes(this.member().id));
+ 
+
 
   toggleLike(event:MouseEvent){
   event.stopPropagation();

@@ -9,7 +9,6 @@ import { LikesService } from './likes-service';
 export class InitService {
 
   private accountService=inject(AccountService);
-  private likeService=inject(LikesService);
 
 
     

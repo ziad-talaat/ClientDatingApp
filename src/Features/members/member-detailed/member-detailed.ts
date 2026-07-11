@@ -7,6 +7,7 @@ import { AgePipe } from '../../../Core/pipes/age-pipe';
 import { AccountService } from '../../../Core/services/account-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MemberService } from '../../../Core/services/member-service';
+import { PresenceService } from '../../../Core/services/presence-service';
 
 @Component({
   selector: 'app-member-detailed',
@@ -22,6 +23,7 @@ export class MemberDetailed implements OnInit{
   protected member=signal<Member|undefined>(undefined);
   protected title =signal<string|undefined>('Profile');
   protected memberService=inject(MemberService);
+  protected presenceService=inject(PresenceService);
  
  protected routeId = toSignal(
   this.route.paramMap.pipe(
