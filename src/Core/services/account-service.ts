@@ -57,13 +57,17 @@ setCurrentUser(user:user){
 
 
 logout(){
-  // localStorage.removeItem('user');
+  this.http.post(`${this.baseUrl}account/logout`,{},{withCredentials:true}).subscribe({
+    next:()=>{
   localStorage.removeItem('filters')
   this.currentUser.set(null);
-  this.router.navigateByUrl('/');
+  // this.router.navigateByUrl('/');
   this.likeService.clearLikeIds();
   this.presenceService.stopHubConnection();
 
+    }
+  });
+ 
 }
 
 refreshToken(){

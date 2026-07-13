@@ -5,16 +5,40 @@
         class="grid grid-cols-4 auto-rows-min gap-3 p-5 h-[65vh] overflow-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent"
       >
         @for (photo of photos; track photo.photoId) {
-          <div class="relative">
-            <img [src]="photo?.photoUrl" />
-            @if(memberService.member()?.id==accountService.currentUser()?.id){
+          @if (photo.isApproaved) {
+            <div class="relative">
+              <img [src]="photo?.photoUrl" />
+              @if (memberService.member()?.id == accountService.currentUser()?.id) {
+                <app-star-button
+                  class="absolute top-1 right-1"
+                  [selected]="photo.photoUrl === memberService.member()?.photoUrl"
+                  (emitSetMainImageevent)="setMainPhoto(photo)"
+                ></app-star-button>
+                <app-delete-button
+                  class="absolute top-1 left-1"
+                  [selected]="photo.photoUrl === memberService.member()?.photoUrl"
+                  [disapled]="photo.photoUrl === memberService.member()?.photoUrl"
+                  (emitSetMainImageevent)="deletePhoto(photo.photoId)"
+                />
+              }
+            </div>
+          } @else {
+           <div class="relative w-64">
+  <img [src]="photo?.photoUrl" />
 
-              <app-star-button   class="absolute top-1 right-1" [selected]="photo.photoUrl===memberService.member()?.photoUrl"   (emitSetMainImageevent)="setMainPhoto(photo)" ></app-star-button>
-              <app-delete-button class="absolute top-1 left-1" [selected]="photo.photoUrl===memberService.member()?.photoUrl" [disapled]="photo.photoUrl===memberService.member()?.photoUrl" (emitSetMainImageevent)="deletePhoto(photo.photoId) "/>
-            }
-          </div>
-          
-          
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-black/70 rounded-lg flex flex-col items-center justify-center">
+    
+    <p class="text-white font-semibold text-center">
+      This photo is hidden
+    </p>
+
+    <p class="text-gray-300 text-sm text-center mt-1 px-4">
+      It will be visible after moderator approval.
+    </p>
+  </div>
+</div>
+          }
         }
       </div>
     } @else {

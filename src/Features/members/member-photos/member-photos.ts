@@ -40,16 +40,16 @@ this.loading.set(true);
 this.memberService.uploadImage(file).subscribe({
   next:photo=>{
     
-   const user= this.accountService.currentUser();
-     user!.photoUrl=photo.photoUrl;
-      this.accountService.setCurrentUser(user!);
-      this.memberService.member.update(member=>{
-        if(!member)return member;
-        return {
-          ...member,
-          photoUrl:photo.photoUrl,
-        }
-      })
+  //  const user= this.accountService.currentUser();
+  //    user!.photoUrl=photo.photoUrl;
+  //     this.accountService.setCurrentUser(user!);
+      // this.memberService.member.update(member=>{
+      //   if(!member)return member;
+      //   return {
+      //     ...member,
+      //     photoUrl:photo.photoUrl,
+      //   }
+      // })
     this.memberService.editMode.set(false);
     this.loading.set(false);
     this.photos.update((old)=>{

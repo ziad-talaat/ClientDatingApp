@@ -34,8 +34,14 @@
       </ul>
 
       <div class="card-actions mt-4">
-        <button class="btn btn-info flex-1">Go Back</button>
-        <button class="btn btn-primary flex-1">Like User</button>
+        <button routerLink="/members" class="btn btn-info flex-1">Go Back</button>
+        @if(accountService.currentUser()?.id!==member.id){
+          <button (click)="likesService.toggleLike(member.id)" 
+               [class.btn-error]="hasLiked()"
+               [class.btn-success]="!hasLiked()"
+          class="btn  flex-1">{{hasLiked()?'Remover Like':'Like User'}}</button>
+        }
+
       </div>
     </div>
   </div>

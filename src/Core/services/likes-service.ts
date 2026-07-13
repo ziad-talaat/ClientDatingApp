@@ -16,7 +16,15 @@ export class LikesService {
   likedIds =signal<string[]>([]);
 
   toggleLike(id:string){
-   return this.httpClient.post(`${this.baseUrl}likes/${id}`,{});
+   return this.httpClient.post(`${this.baseUrl}likes/${id}`,{}).subscribe({
+    next:()=>{
+      if(this.likedIds().includes(id)){
+        this.likedIds.update(ids=>ids.filter(x=>x !==id));
+      }else{
+        this.likedIds.update(ids=>[...ids,id]);
+      }
+    }
+  });;
   }
   
   getLikes(predicate:string,memberParams:memberParams){

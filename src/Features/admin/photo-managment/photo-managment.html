@@ -1,1 +1,25 @@
-<p>photo-managment works!</p>
+  @if (approavableImages(); as photos) {
+    @if (photos.length > 0) {
+      <div
+        class="grid grid-cols-4 auto-rows-min gap-3 p-5 h-[65vh] overflow-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent"
+      >
+         @for(photo of photos ;track photo.photoId) {
+          <div class="relative">
+            <img [src]="photo?.photoUrl" />
+            <button class="absolute bottom-1 left-1  btn btn-success" (click)="approveImage(photo.photoId,true)" >Approve</button>
+            <button class="absolute bottom-1 right-1 btn btn-error" (click)="approveImage(photo.photoId,false)">Reject</button>
+          </div>
+          
+          
+        }
+      </div>
+    } @else {
+      <p class="text-center text-gray-500">no photos available</p>
+    }
+  }      
+      
+      
+      
+    
+
+       

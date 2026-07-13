@@ -25,14 +25,6 @@ protected isOnLine=computed(()=>this.presenceService.onLineUsers().includes(this
   toggleLike(event:MouseEvent){
   event.stopPropagation();
 
-  this.likeService.toggleLike(this.member().id).subscribe({
-    next:()=>{
-      if(this.hasLiked()){
-        this.likeService.likedIds.update(ids=>ids.filter(id=>id!==this.member().id));
-      }else{
-        this.likeService.likedIds.update(ids=>[...ids,this.member().id]);
-      }
-    }
-  });
+  this.likeService.toggleLike(this.member().id);
   }
 }
