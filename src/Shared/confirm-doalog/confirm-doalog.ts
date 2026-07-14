@@ -14,6 +14,7 @@ export class ConfirmDoalog {
 
    
   private resolver:((result:boolean)=>void )|null=null;
+  
 constructor(){
   inject(ConfirmDilogService).register(this)
 }
