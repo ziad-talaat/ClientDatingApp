@@ -7,6 +7,7 @@ import { themes } from '../theme';
 import { finalize } from 'rxjs';
 import { BusyService } from '../../Core/services/busy-service';
 import { HasRole } from '../../Shared/directives/has-role';
+import { PresenceService } from '../../Core/services/presence-service';
 
 @Component({
   selector: 'app-nav',
@@ -17,6 +18,8 @@ import { HasRole } from '../../Shared/directives/has-role';
 export class Nav implements OnInit {
    protected loginForm!: FormGroup ;
    private fb=inject(FormBuilder);
+   protected presence=inject(PresenceService);
+   displayUnReadMessgaes:boolean=false;
   ngOnInit(): void {
     document.documentElement.setAttribute('data-theme',this.selectedTheme());
 
@@ -83,6 +86,13 @@ export class Nav implements OnInit {
       },
       error:error=>this.toastService.error(error.error?.message??"invaid Data")
     })
+  }
+  onMouseOver(){
+    this.displayUnReadMessgaes=true;
+    console.log(this.presence.unReadMessages());
+  }
+  onMouseLeave(){
+    this.displayUnReadMessgaes=false;
   }
 
   logout(){

@@ -1,23 +1,22 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { pageResult } from '../../types/pageResult';
 import { message } from '../../types/message';
 import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
 import { AccountService } from './account-service';
-
 @Injectable({
   providedIn: 'root',
 })
 export class MessagesService {
- 
    private baseUrl=environment.apiUrl;
    private httpClient=inject(HttpClient);
    private accountService=inject(AccountService);
    private hubUrl=environment.hubUrl;
    private hubConnection?:HubConnection;
-
    messages=signal<message[]>([]);
+
+  
 
     createHubConnection(otherUserId:string){
       const currentUser=this.accountService.currentUser();
@@ -42,6 +41,8 @@ export class MessagesService {
         message.currentUserSender=message.senderId===currentUser.id;
         this.messages.update(oldMessages=>[...oldMessages,message])
       })
+
+     
     }
     
     stopHubConnection(){

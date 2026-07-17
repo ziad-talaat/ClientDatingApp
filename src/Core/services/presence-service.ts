@@ -14,7 +14,10 @@ export class PresenceService {
   hubConnection?:HubConnection;
    
   onLineUsers=signal<string[]>([]);
+ count=signal<number>(0);
+ unReadMessages=signal<message[]>([]);
 
+ 
    
 
 
@@ -34,6 +37,11 @@ export class PresenceService {
   this.hubConnection.on('UserOffline',userId=>{
      this.onLineUsers.update(users=>users.filter(x=> x !== userId))    
   });
+
+   this.hubConnection.on('unReadMessage',(unreadMessages:message[]) =>{
+    this.unReadMessages.set(unreadMessages);
+        this.count.set(unreadMessages.length);
+      })
    
 
   this.hubConnection.on('GetOnLineUsers',userIds=>{
@@ -42,6 +50,11 @@ export class PresenceService {
 
       this.hubConnection.on('MessageRecieved',(message :message)=>{
            this.toastService.info(message.senderName +' has sent you a message',2000,message.senderImageUrl,`/members/${message.senderId}/Messages`);
+      }); 
+
+ this.hubConnection.on('newUnreadMessage',(message :message)=>{
+  this.unReadMessages.update(oldMessage=>[...oldMessage,message]);
+  this.count.update(x=>x+1);
       }); 
 
 

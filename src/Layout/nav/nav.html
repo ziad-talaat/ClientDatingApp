@@ -94,5 +94,66 @@
       }
 
     </div>
+     
+    
+    @if(accountService.currentUser()){
+    <div (mouseover)="onMouseOver()" (mouseleave)="onMouseLeave()" class="relative inline-block cursor-pointer">
+  <svg   xmlns="http://www.w3.org/2000/svg"
+       height="24"
+       width="21"
+       viewBox="0 0 448 512">
+    <path fill="rgb(255, 212, 59)"
+      d="M224 0c-17.7 0-32 14.3-32 32l0 3.2C119 50 64 114.6 64
+      192l0 21.7c0 48.1-16.4 94.8-46.4 132.4L7.8 358.3C2.7 364.6
+      0 372.4 0 380.5 0 400.1 15.9 416 35.5
+      416l376.9 0c19.6 0 35.5-15.9 35.5-35.5
+      0-8.1-2.7-15.9-7.8-22.2l-9.8-12.2C400.4
+      308.5 384 261.8 384 213.7l0-21.7c0-77.4-55-142-128-156.8l0-3.2
+      c0-17.7-14.3-32-32-32zM162 464c7.1 27.6
+      32.2 48 62 48s54.9-20.4 62-48l-124 0z"/>
+  </svg>
+
+  <span
+    class="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+  {{presence.count() >= 100 ? '99+' :presence.count()}}
+  </span>
+
+  
+ @if(displayUnReadMessgaes){
+
+  <div
+  class="absolute right-0 top-8 z-50 w-80 max-h-96 overflow-y-auto rounded-lg border bg-white shadow-xl">
+
+  @for(message of presence.unReadMessages(); track message.id) {
+    <div class="flex gap-3 p-3 hover:bg-gray-100 border-b">
+      <img
+        [src]="message.senderImageUrl"
+        class="w-10 h-10 rounded-full">
+
+      <div>
+        <div class="font-semibold text-black">
+          {{ message.senderName }}
+        </div>
+
+        <div class="text-sm text-gray-500">
+          {{ message.content }}
+        </div>
+      </div>
+    </div>
+  }
+
+</div>
+
+  }
+</div>
+
+
+
+    }
+    
+ 
+
+   
+
   </div>
 </header>
