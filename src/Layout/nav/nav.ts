@@ -8,10 +8,11 @@ import { finalize } from 'rxjs';
 import { BusyService } from '../../Core/services/busy-service';
 import { HasRole } from '../../Shared/directives/has-role';
 import { PresenceService } from '../../Core/services/presence-service';
+import { TimeAgoPipe } from "../../Core/pipes/time-ago-pipe";
 
 @Component({
   selector: 'app-nav',
-  imports: [FormsModule, RouterLink, RouterLinkActive,ReactiveFormsModule,HasRole],
+  imports: [FormsModule, RouterLink, RouterLinkActive, ReactiveFormsModule, HasRole, TimeAgoPipe],
   templateUrl: './nav.html',
   styleUrl: './nav.css',
 })
@@ -89,11 +90,18 @@ export class Nav implements OnInit {
   }
   onMouseOver(){
     this.displayUnReadMessgaes=true;
-    console.log(this.presence.unReadMessages());
   }
   onMouseLeave(){
     this.displayUnReadMessgaes=false;
   }
+
+navigateToChat(id:string){
+  if(!id)return;
+  this.router.navigateByUrl(`/members/${id}/Messages`);
+}
+
+
+
 
   logout(){
     this.accountService.logout();
